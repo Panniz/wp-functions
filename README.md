@@ -1009,7 +1009,7 @@ metric and scoring much higher performance results.
 Depending on where you like these 3rd-party scripts to be, you can either use `wp_footer` action to print the
 code in footer, or put it in your main `app.js` script which, in turn, is enqueued on `wp_enqueue_scripts` action.
 
-javascript
+```javascript
 <script>
 var fired = false;
 
