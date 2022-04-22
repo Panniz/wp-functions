@@ -48,6 +48,7 @@ This is a list of useful WordPress functions that I often reference to enhance o
 - [Exclude a Category From WordPress Loops](#exclude-a-category-from-wordpress-loops)
 - [Disable the message "JQMIGRATE: Migrate is installed, version 1.4.1"](#user-content-disable-the-message---jqmigrate-migrate-is-installed-version-141)
 - [Load heavy 3rd-party scripts later for better performance](#load-heavy-3rd-party-scripts-later-for-better-performance)
+- [Fix WordPress current_page_parent for Custom Post Type Archive Menu Links](#fix-wordPress-current_page_parent-for-custom-post-type-archive-menu-links)
 
 ## Hide WordPress Update Nag to All But Admins
 
