@@ -1009,7 +1009,7 @@ metric and scoring much higher performance results.
 Depending on where you like these 3rd-party scripts to be, you can either use `wp_footer` action to print the
 code in footer, or put it in your main `app.js` script which, in turn, is enqueued on `wp_enqueue_scripts` action.
 
-```javascript
+javascript
 <script>
 var fired = false;
 
@@ -1026,3 +1026,34 @@ window.addEventListener('scroll', () => {
 });
 </script>
 ```
+
+## Fix WordPress current_page_parent for Custom Post Type Archive Menu Links
+
+Checks the current page to see if current_page_parent should be removed from the blog link or added to a cpt archive pagelink
+
+```php
+
+function add_current_page_parent_class_cpt( $classes, $item, $args ) {
+	// Remove current_page_parent from Blog if not on a post
+	$cpp = array_search( 'current_page_parent', $classes );
+	if ( $cpp !== false && $item->type === 'post_type' ) {
+		$qo = get_queried_object();
+		if ( ( $qo instanceof WP_Post && $qo->post_type !== 'post' ) ||
+	 		$qo instanceof WP_Post_Type && $qo->name !== 'post' ) {
+			array_splice($classes, $cpp - 1, 1);
+		}
+	}
+
+	// Add current_page_parent for cpts
+	else {
+		$pt = get_post_type();
+		if ( $pt !== 'page' && $item->object === $pt ) {
+			$classes[] = 'current_page_parent';
+		}
+	}
+
+	return $classes;
+}
+add_filter( 'nav_menu_css_class', 'add_current_page_parent_class_cpt', 20, 3 );
+```
+
