@@ -49,6 +49,7 @@ This is a list of useful WordPress functions that I often reference to enhance o
 - [Disable the message "JQMIGRATE: Migrate is installed, version 1.4.1"](#user-content-disable-the-message---jqmigrate-migrate-is-installed-version-141)
 - [Load heavy 3rd-party scripts later for better performance](#load-heavy-3rd-party-scripts-later-for-better-performance)
 - [Fix WordPress current_page_parent for Custom Post Type Archive Menu Links](#fix-wordPress-current_page_parent-for-custom-post-type-archive-menu-links)
+- [Create dynamic shortcode to include template parts](#create-dynamic-shortcode-to-include-template-parts)
 
 ## Hide WordPress Update Nag to All But Admins
 
@@ -1058,3 +1059,19 @@ function add_current_page_parent_class_cpt( $classes, $item, $args ) {
 add_filter( 'nav_menu_css_class', 'add_current_page_parent_class_cpt', 20, 3 );
 ```
 
+## Create dynamic shortcode to include template parts
+
+```php
+function insert_template_part( $atts, $content = null ){
+	   $tp_atts = shortcode_atts(array( 
+		  'path' =>  null,
+	   ), $atts);         
+	   ob_start();  
+	   get_template_part($tp_atts['path']);  
+	   $ret = ob_get_contents();  
+	   ob_end_clean();  
+	   return $ret;    
+	}
+add_shortcode('template_part', 'insert_template_part');
+
+```
