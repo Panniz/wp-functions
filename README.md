@@ -1074,4 +1074,6 @@ function insert_template_part( $atts, $content = null ){
 	}
 add_shortcode('template_part', 'insert_template_part');
 
+//Shortcode Model
+[template_part path="path-to-template-part"]
 ```
