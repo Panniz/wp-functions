@@ -50,6 +50,7 @@ This is a list of useful WordPress functions that I often reference to enhance o
 - [Load heavy 3rd-party scripts later for better performance](#load-heavy-3rd-party-scripts-later-for-better-performance)
 - [Fix WordPress current_page_parent for Custom Post Type Archive Menu Links](#fix-wordPress-current_page_parent-for-custom-post-type-archive-menu-links)
 - [Create dynamic shortcode to include template parts](#create-dynamic-shortcode-to-include-template-parts)
+- [Increase Max Results per Page from WP Rest Api](#increase-max-results-per-page-from-wp-rest-api)
 
 ## Hide WordPress Update Nag to All But Admins
 
@@ -1076,4 +1077,19 @@ add_shortcode('template_part', 'insert_template_part');
 
 //Shortcode Model
 [template_part path="path-to-template-part"]
+```
+
+## Increase Max Results per Page from WP Rest Api
+
+```php
+
+function increase_results_per_page( $params ) {
+    if ( isset( $params['per_page'] ) ) {
+        $params['per_page']['maximum'] = 500;
+    }
+    return $params;
+}
+
+add_filter( 'rest_{post_type}_collection_params', 'increase_results_per_page', 10, 1 );
+
 ```
