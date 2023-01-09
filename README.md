@@ -52,6 +52,7 @@ This is a list of useful WordPress functions that I often reference to enhance o
 - [Create dynamic shortcode to include template parts](#create-dynamic-shortcode-to-include-template-parts)
 - [Increase Max Results per Page from WP Rest Api](#increase-max-results-per-page-from-wp-rest-api)
 - [Remove default Hello Theme styles](#remove-default-hello-theme-styles)
+- [Disable wp core email alerts](#disable-wp-core-email-alerts)
 
 ## Hide WordPress Update Nag to All But Admins
 
@@ -1104,5 +1105,25 @@ function remove_default_elementor_theme_style(){
 }
 add_filter('hello_elementor_enqueue_theme_style', 'remove_default_elementor_theme_style');
 add_filter('hello_elementor_enqueue_style', 'remove_default_elementor_theme_style');
+
+```
+
+## Disable wp core email alerts
+
+```php
+//Disable Auto Update Notification Emails for Core Updates 
+function jz_stop_core_update_emails( $send, $type, $core_update, $result ) {
+    if ( ! empty( $type ) && $type == 'success' ) {
+        return false;
+    }
+    return true;
+}
+add_filter( 'auto_core_update_send_email', 'wpb_stop_auto_update_emails', 10, 4 );
+
+// Disable Auto Update Notification Emails for Plugins
+add_filter( 'auto_plugin_update_send_email', '__return_false' );
+
+//Disable Auto Update Notification Emails for Themes
+add_filter( 'auto_theme_update_send_email', '__return_false' );
 
 ```
