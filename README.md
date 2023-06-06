@@ -53,6 +53,7 @@ This is a list of useful WordPress functions that I often reference to enhance o
 - [Increase Max Results per Page from WP Rest Api](#increase-max-results-per-page-from-wp-rest-api)
 - [Remove default Hello Theme styles](#remove-default-hello-theme-styles)
 - [Disable wp core email alerts](#disable-wp-core-email-alerts)
+- [Completely disable comments](#completely-disable-comments)
 
 ## Hide WordPress Update Nag to All But Admins
 
@@ -1126,4 +1127,48 @@ add_filter( 'auto_plugin_update_send_email', '__return_false' );
 //Disable Auto Update Notification Emails for Themes
 add_filter( 'auto_theme_update_send_email', '__return_false' );
 
+```
+
+## Completely disable comments
+
+```php
+add_action('admin_init', function () {
+    // Redirect any user trying to access comments page
+    global $pagenow;
+     
+    if ($pagenow === 'edit-comments.php') {
+        wp_safe_redirect(admin_url());
+        exit;
+    }
+ 
+    // Remove comments metabox from dashboard
+    remove_meta_box('dashboard_recent_comments', 'dashboard', 'normal');
+ 
+    // Disable support for comments and trackbacks in post types
+    foreach (get_post_types() as $post_type) {
+        if (post_type_supports($post_type, 'comments')) {
+            remove_post_type_support($post_type, 'comments');
+            remove_post_type_support($post_type, 'trackbacks');
+        }
+    }
+});
+ 
+// Close comments on the front-end
+add_filter('comments_open', '__return_false', 20, 2);
+add_filter('pings_open', '__return_false', 20, 2);
+ 
+// Hide existing comments
+add_filter('comments_array', '__return_empty_array', 10, 2);
+ 
+// Remove comments page in menu
+add_action('admin_menu', function () {
+    remove_menu_page('edit-comments.php');
+});
+ 
+// Remove comments links from admin bar
+add_action('init', function () {
+    if (is_admin_bar_showing()) {
+        remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
+    }
+});
 ```
