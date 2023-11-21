@@ -3,6 +3,7 @@
 This is a list of useful WordPress functions that I often reference to enhance or clean up my sites. Please be careful and make backups.
 
 - [Hide WordPress Update Nag to All But Admins](#hide-wordpress-update-nag-to-all-but-admins)
+- [Hide WordPress Notices](#hide-wordpress-notices)
 - [Utilize Proper WordPress Titles](#utilize-proper-wordpress-titles)
 - [Create Custom WordPress Dashboard Widget](#create-custom-wordpress-dashboard-widget)
 - [Remove All Dashboard Widgets](#remove-all-dashboard-widgets)
@@ -55,6 +56,7 @@ This is a list of useful WordPress functions that I often reference to enhance o
 - [Disable wp core email alerts](#disable-wp-core-email-alerts)
 - [Completely disable comments](#completely-disable-comments)
 - [Allow Webp Upload](#allow-webp-upload)
+- [Redirect User after Login](#redirect-user-after-login)
 
 ## Hide WordPress Update Nag to All But Admins
 
@@ -69,6 +71,30 @@ function hide_update_notice_to_all_but_admin() {
     }
 }
 add_action( 'admin_head', 'hide_update_notice_to_all_but_admin', 1 );
+```
+
+
+## Hide WordPress Notices
+
+```php
+//Hide WordPress Notices
+add_action('admin_notices', 'block_notices_for_sub_sucribers');
+add_action('wp_head', 'block_notices_for_sub_sucribers');
+function block_notices_for_sub_sucribers()
+{
+    if (!current_user_can('edit_pages')) { ?>
+        <style>
+        .update_nag,
+        .updated,
+        .notice,
+        .show-admin-bar,
+        .user-language-wrap,
+        #wpfooter,
+        #wp-admin-bar-languages,
+        #wp-admin-bar-wp-logo{display:none !important}
+        </style>
+    <?php }
+}
 ```
 
 ## Utilize Proper WordPress Titles
@@ -123,6 +149,8 @@ function remove_dashboard_widgets() {
     unset( $wp_meta_boxes['dashboard']['side']['core']['dashboard_secondary'] );
 
     remove_meta_box( 'dashboard_activity', 'dashboard', 'normal' );
+    //Elementor
+    remove_meta_box('e-dashboard-overview', 'dashboard', 'normal');
 }
 add_action( 'wp_dashboard_setup', 'remove_dashboard_widgets' );
 ```
@@ -1214,4 +1242,12 @@ function jz_mime_types_webp( $mimes ) {
 
   return $mimes;
 }
+```
+## Redirect User after Login
+
+```php
+function login_redirect(){
+    return home_url();
+}
+add_filter('login_redirect', 'login_redirect');
 ```
